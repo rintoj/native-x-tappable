@@ -1,5 +1,4 @@
-import { debounce } from 'lodash'
-import React, { ReactNode, useCallback, useEffect } from 'react'
+import React, { ReactNode, useCallback } from 'react'
 import { TouchableOpacity, View, ViewStyle } from 'react-native'
 
 type BaseType = {
@@ -24,22 +23,11 @@ export function Tappable<TData>(props: TappableProps<TData>) {
   type PropType = PropsWithData<TData> & PropsWithoutData
   const { children, data, feedback, disabled, onTap, style } = props as PropType
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callback = useCallback(
-    debounce(
-      () => {
-        if (!disabled && typeof onTap === 'function') {
-          onTap(data)
-        }
-      },
-      500,
-      { leading: true },
-    ),
-    [disabled, onTap, data],
-  )
-
-  useEffect(() => {
-    return () => callback?.cancel()
-  }, [callback])
+  const callback = useCallback(() => {
+    if (!disabled && typeof onTap === 'function') {
+      onTap(data)
+    }
+  }, [disabled, onTap, data])
 
   if (disabled === true || onTap == null) {
     return <View style={style}>{children}</View>
