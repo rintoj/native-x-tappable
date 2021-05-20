@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback } from 'react'
-import { TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Platform, TouchableOpacity, View, ViewStyle } from 'react-native'
 
 type BaseType = {
   children?: ReactNode | ReactNode[] | null
@@ -30,17 +30,23 @@ export function Tappable<TData>(props: TappableProps<TData>) {
   }, [disabled, onTap, data])
 
   if (disabled === true || onTap == null) {
-    return <View style={style}>{children}</View>
+    return (
+      <View style={[Platform.select({ web: { cursor: 'not-allowed' } as ViewStyle }), style]}>
+        {children}
+      </View>
+    )
   }
 
   return (
     <TouchableOpacity
       disabled={disabled}
-      activeOpacity={feedback === false || (onTap && feedback == null) ? 1 : 0.8}
+      activeOpacity={feedback === false || (!!onTap && feedback == null) ? 1 : 0.8}
       onPress={callback}
       style={style}
     >
-      {children}
+      <View style={[Platform.select({ web: { cursor: 'pointer' } as ViewStyle }), style]}>
+        {children}
+      </View>
     </TouchableOpacity>
   )
 }
