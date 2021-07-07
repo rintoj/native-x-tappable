@@ -31,7 +31,7 @@ export function Tappable<TData>(props: TappableProps<TData>) {
 
   if (disabled === true || onTap == null) {
     return (
-      <View style={[Platform.select({ web: { cursor: 'not-allowed' } as ViewStyle }), style]}>
+      <View style={[Platform.select({ web: { cursor: disabled? 'not-allowed': 'auto' } as ViewStyle }), style]}>
         {children}
       </View>
     )
