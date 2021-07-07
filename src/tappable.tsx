@@ -22,7 +22,7 @@ export type TappableProps<T> = PropsWithData<T> | PropsWithoutData
 export function Tappable<TData>(props: TappableProps<TData>) {
   type PropType = PropsWithData<TData> & PropsWithoutData
   const { children, data, feedback, disabled, onTap, style } = props as PropType
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   const callback = useCallback(() => {
     if (!disabled && typeof onTap === 'function') {
       onTap(data)
@@ -31,7 +31,12 @@ export function Tappable<TData>(props: TappableProps<TData>) {
 
   if (disabled === true || onTap == null) {
     return (
-      <View style={[Platform.select({ web: { cursor: disabled? 'not-allowed': 'auto' } as ViewStyle }), style]}>
+      <View
+        style={[
+          Platform.select({ web: { cursor: disabled ? 'not-allowed' : 'auto' } as ViewStyle }),
+          style,
+        ]}
+      >
         {children}
       </View>
     )
